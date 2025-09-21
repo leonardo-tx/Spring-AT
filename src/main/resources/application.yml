@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: example-edu-api
+
+jwt:
+  private:
+    key: classpath:keys/private-key.pem
+  public:
+    key: classpath:keys/public-key.pem
+  settings:
+    expiration-in-seconds: 3600
