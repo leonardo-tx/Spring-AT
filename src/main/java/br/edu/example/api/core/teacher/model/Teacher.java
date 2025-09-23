@@ -9,7 +9,9 @@ public final class Teacher extends Person {
     private static final Set<PermissionFlag> permissionFlags = Set.of(
             PermissionFlag.TEACHER_MANAGEMENT,
             PermissionFlag.STUDENT_MANAGEMENT,
-            PermissionFlag.GRADE_MANAGEMENT
+            PermissionFlag.GRADE_MANAGEMENT,
+            PermissionFlag.COURSE_MANAGEMENT,
+            PermissionFlag.DISCIPLINE_MANAGEMENT
     );
 
     public Teacher(

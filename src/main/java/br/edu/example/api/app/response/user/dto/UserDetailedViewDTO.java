@@ -1,7 +1,7 @@
 package br.edu.example.api.app.response.user.dto;
 
+import br.edu.example.api.app.response.generic.dto.AddressViewDTO;
 import br.edu.example.api.core.generic.model.UserRole;
-import br.edu.example.api.infra.generic.persistence.AddressJpa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +19,6 @@ public class UserDetailedViewDTO {
     private String name;
     private String cpf;
     private String phone;
-    private AddressJpa address;
+    private AddressViewDTO address;
     private UserRole role;
 }

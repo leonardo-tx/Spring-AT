@@ -9,6 +9,7 @@ public final class EmailInvalidLengthException extends ValidationException {
             Email.MIN_LENGTH,
             Email.MAX_LENGTH
     );
+
     public EmailInvalidLengthException() {
         super("email.invalid.length", MESSAGE);
     }
