@@ -20,9 +20,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher create(Teacher teacher, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.TEACHER_MANAGEMENT);
         }
@@ -43,9 +40,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void delete(Teacher teacher, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.TEACHER_MANAGEMENT);
         }

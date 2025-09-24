@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +22,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course create(Course course, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.COURSE_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.COURSE_MANAGEMENT);
         }
@@ -34,15 +32,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course update(Course course, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
+    public Course update(CourseCode oldCode, Course course, User currentUser) {
         if (!currentUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.TEACHER_MANAGEMENT);
         }
-        if (!courseRepository.existsByCode(course.getCode().getValue())) {
-            throw new CourseNotFoundException();
+        Course oldCourse = courseRepository.findByCode(oldCode.getValue())
+                .orElseThrow(CourseNotFoundException::new);
+        if (!Objects.equals(oldCode.getValue(), course.getCode().getValue())) {
+            courseRepository.delete(oldCourse);
         }
         return courseRepository.save(course);
     }
@@ -54,9 +51,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getAll(User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.COURSE_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.COURSE_MANAGEMENT);
         }
@@ -65,9 +59,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void delete(Course course, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.COURSE_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.COURSE_MANAGEMENT);
         }

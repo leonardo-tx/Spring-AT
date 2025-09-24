@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DisciplineService {
     Discipline create(Discipline discipline, User currentUser);
-    Discipline update(Discipline discipline, User currentUser);
+    Discipline update(DisciplineCode oldCode, Discipline discipline, User currentUser);
     Discipline getByCode(DisciplineCode code);
     List<Discipline> getAll(User currentUser);
     void delete(Discipline discipline, User currentUser);

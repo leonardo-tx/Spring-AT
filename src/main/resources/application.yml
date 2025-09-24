@@ -3,7 +3,7 @@ spring:
     name: example-edu-api
   data:
     mongodb:
-      uri: mongodb://localhost:27017/example_edu_db
+      uri: ${MONGODB_URI:mongodb://localhost:27017/example_edu_db}
       database: example_edu_db
       auto-index-creation: true
 

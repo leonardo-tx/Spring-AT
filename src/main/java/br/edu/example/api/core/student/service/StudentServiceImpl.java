@@ -21,9 +21,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student create(Student student, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.STUDENT_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.STUDENT_MANAGEMENT);
         }
@@ -44,9 +41,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAll(User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.STUDENT_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.STUDENT_MANAGEMENT);
         }
@@ -55,9 +49,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void delete(Student student, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.STUDENT_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.STUDENT_MANAGEMENT);
         }

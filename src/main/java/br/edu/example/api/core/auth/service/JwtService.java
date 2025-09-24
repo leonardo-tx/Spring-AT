@@ -1,7 +1,8 @@
 package br.edu.example.api.core.auth.service;
 
-import org.springframework.security.core.Authentication;
+import br.edu.example.api.core.auth.model.Password;
+import br.edu.example.api.core.generic.model.Email;
 
 public interface JwtService {
-    String generateToken(Authentication authentication);
+    String generateToken(Email email, Password password);
 }

@@ -1,6 +1,5 @@
 package br.edu.example.api.core.discipline.service;
 
-import br.edu.example.api.core.auth.exception.service.NotAuthenticatedException;
 import br.edu.example.api.core.auth.model.User;
 import br.edu.example.api.core.discipline.exception.service.DisciplineCodeConflictException;
 import br.edu.example.api.core.discipline.exception.service.DisciplineNotFoundException;
@@ -13,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +21,6 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public Discipline create(Discipline discipline, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.DISCIPLINE_MANAGEMENT);
         }
@@ -34,15 +31,14 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public Discipline update(Discipline discipline, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
+    public Discipline update(DisciplineCode oldCode, Discipline discipline, User currentUser) {
         if (!currentUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.TEACHER_MANAGEMENT);
         }
-        if (!disciplineRepository.existsByCode(discipline.getCode().getValue())) {
-            throw new DisciplineNotFoundException();
+        Discipline oldDiscipline = disciplineRepository.findByCode(oldCode.getValue())
+                .orElseThrow(DisciplineNotFoundException::new);
+        if (!Objects.equals(oldCode.getValue(), discipline.getCode().getValue())) {
+            disciplineRepository.delete(oldDiscipline);
         }
         return disciplineRepository.save(discipline);
     }
@@ -54,9 +50,6 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public List<Discipline> getAll(User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.DISCIPLINE_MANAGEMENT);
         }
@@ -65,9 +58,6 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public void delete(Discipline discipline, User currentUser) {
-        if (currentUser == null) {
-            throw new NotAuthenticatedException();
-        }
         if (!currentUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.DISCIPLINE_MANAGEMENT);
         }
