@@ -1,5 +1,6 @@
 package br.edu.example.api.core.student.service;
 
+import br.edu.example.api.core.auth.exception.service.UserEmailConflictException;
 import br.edu.example.api.core.auth.exception.service.UserNotFoundException;
 import br.edu.example.api.core.auth.model.User;
 import br.edu.example.api.core.auth.repository.UserRepository;
@@ -22,6 +23,9 @@ public class StudentServiceImpl implements StudentService {
     public Student create(Student student, User currentUser) {
         if (!currentUser.hasPermission(PermissionFlag.STUDENT_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.STUDENT_MANAGEMENT);
+        }
+        if (userRepository.findByEmail(student.getEmail()).isPresent()) {
+            throw new UserEmailConflictException();
         }
         User user = new User(student);
         User createdUser = userRepository.save(user);

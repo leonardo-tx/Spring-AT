@@ -1,14 +1,15 @@
 package br.edu.example.api.core.teacher.service;
 
+import br.edu.example.api.core.auth.exception.service.UserEmailConflictException;
 import br.edu.example.api.core.auth.exception.service.UserNotFoundException;
 import br.edu.example.api.core.auth.model.User;
 import br.edu.example.api.core.auth.repository.UserRepository;
 import br.edu.example.api.core.generic.exception.ForbiddenException;
+import br.edu.example.api.core.generic.model.Email;
 import br.edu.example.api.core.generic.model.PermissionFlag;
 import br.edu.example.api.core.generic.model.UserRole;
 import br.edu.example.api.core.student.model.Student;
 import br.edu.example.api.core.teacher.model.Teacher;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,19 +33,18 @@ class TeacherServiceImplTest {
     @InjectMocks
     private TeacherServiceImpl teacherService;
 
+    @Mock
     private Teacher teacher;
-    private UUID teacherId;
 
-    @BeforeEach
-    void setupBeforeEach() {
-        teacherId = UUID.randomUUID();
-        teacher = mock(Teacher.class);
-    }
+    private final UUID teacherId = UUID.randomUUID();;
 
     @Test
     void shouldCreateTeacherWhenUserHasPermission() {
         User adminUser = mock(User.class);
+        Email email = mock(Email.class);
         when(adminUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)).thenReturn(true);
+        when(teacher.getEmail()).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         User savedUser = new User(teacher);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
@@ -53,6 +53,18 @@ class TeacherServiceImplTest {
 
         assertEquals(teacher, result);
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void shouldThrowWhenEmailAlreadyExists() {
+        User adminUser = mock(User.class);
+        Email email = mock(Email.class);
+        when(adminUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)).thenReturn(true);
+        when(teacher.getEmail()).thenReturn(email);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(mock(User.class)));
+
+        assertThrows(UserEmailConflictException.class, () -> teacherService.create(teacher, adminUser));
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
