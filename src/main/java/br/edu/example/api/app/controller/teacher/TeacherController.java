@@ -34,7 +34,7 @@ public class TeacherController {
         Teacher createdTeacher = teacherService.create(teacher, user);
         UserDetailedViewDTO dto = userDetailedViewMapper.toEntity(new User(createdTeacher));
 
-        return ApiResponse.success(dto).createResponse(HttpStatus.OK);
+        return ApiResponse.success(dto).createResponse(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

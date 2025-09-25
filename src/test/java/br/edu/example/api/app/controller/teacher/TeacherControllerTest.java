@@ -70,7 +70,7 @@ class TeacherControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDTO)));
 
-        MockMvcHelper.testSuccessfulResponse(resultActions, HttpStatus.OK)
+        MockMvcHelper.testSuccessfulResponse(resultActions, HttpStatus.CREATED)
                 .andExpect(jsonPath("result").exists());
     }
 
