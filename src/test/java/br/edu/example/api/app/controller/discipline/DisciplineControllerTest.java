@@ -3,6 +3,7 @@ package br.edu.example.api.app.controller.discipline;
 import br.edu.example.api.app.request.discipline.dto.DisciplineCreateDTO;
 import br.edu.example.api.app.request.discipline.dto.DisciplineEnrollmentCreateDTO;
 import br.edu.example.api.app.request.discipline.dto.GradeCreateDTO;
+import br.edu.example.api.app.response.discipline.dto.DisciplineEnrollmentViewDTO;
 import br.edu.example.api.app.response.discipline.dto.DisciplineViewDTO;
 import br.edu.example.api.core.auth.model.User;
 import br.edu.example.api.core.auth.service.ContextService;
@@ -64,6 +65,9 @@ class DisciplineControllerTest {
     @MockitoBean
     private OutputMapper<Discipline, DisciplineViewDTO> disciplineViewMapper;
 
+    @MockitoBean
+    private OutputMapper<DisciplineEnrollment, DisciplineEnrollmentViewDTO> disciplineEnrollmentViewMapper;
+
     private final User mockUser = mock(User.class);
 
     @Test
@@ -115,7 +119,7 @@ class DisciplineControllerTest {
         Discipline discipline = mock(Discipline.class);
         DisciplineViewDTO disciplineViewDTO = new DisciplineViewDTO(code, "Mathematics", UUID.randomUUID());
 
-        when(disciplineService.getByCode(DisciplineCode.valueOf(code))).thenReturn(discipline);
+        when(disciplineService.getByCode(any(DisciplineCode.class))).thenReturn(discipline);
         when(disciplineViewMapper.toEntity(discipline)).thenReturn(disciplineViewDTO);
 
         ResultActions resultActions = mockMvc.perform(get("/discipline/{code}", code));
@@ -176,11 +180,13 @@ class DisciplineControllerTest {
         Discipline discipline = mock(Discipline.class);
         Student student = mock(Student.class);
         DisciplineEnrollment enrollment = mock(DisciplineEnrollment.class);
+        DisciplineEnrollmentViewDTO viewDTO = new DisciplineEnrollmentViewDTO(code, studentId, null);
 
         when(contextService.getCurrentUser()).thenReturn(mockUser);
-        when(disciplineService.getByCode(DisciplineCode.valueOf(code))).thenReturn(discipline);
+        when(disciplineService.getByCode(any(DisciplineCode.class))).thenReturn(discipline);
         when(studentService.getById(studentId)).thenReturn(student);
         when(disciplineEnrollmentService.enrollStudent(student, discipline, mockUser)).thenReturn(enrollment);
+        when(disciplineEnrollmentViewMapper.toEntity(enrollment)).thenReturn(viewDTO);
         when(enrollment.getStudentId()).thenReturn(studentId);
 
         ResultActions resultActions = mockMvc.perform(post("/discipline/{code}/enroll", code)
@@ -188,7 +194,33 @@ class DisciplineControllerTest {
                 .content(objectMapper.writeValueAsString(enrollDTO)));
 
         MockMvcHelper.testSuccessfulResponse(resultActions, HttpStatus.CREATED)
-                .andExpect(jsonPath("result").value(studentId.toString()));
+                .andExpect(jsonPath("result.code").value(viewDTO.getCode()))
+                .andExpect(jsonPath("result.studentId").value(viewDTO.getStudentId().toString()))
+                .andExpect(jsonPath("result.grade").value(viewDTO.getGrade()));
+    }
+
+    @Test
+    void shouldReturnStudentEnroll() throws Exception {
+        String code = "MATH101";
+        UUID studentId = UUID.randomUUID();
+        DisciplineEnrollmentCreateDTO enrollDTO = new DisciplineEnrollmentCreateDTO(studentId);
+        Discipline discipline = mock(Discipline.class);
+        Student student = mock(Student.class);
+        DisciplineEnrollment enrollment = mock(DisciplineEnrollment.class);
+        DisciplineEnrollmentViewDTO viewDTO = new DisciplineEnrollmentViewDTO(code, studentId, null);
+
+        when(contextService.getCurrentUser()).thenReturn(mockUser);
+        when(disciplineService.getByCode(any(DisciplineCode.class))).thenReturn(discipline);
+        when(studentService.getById(studentId)).thenReturn(student);
+        when(disciplineEnrollmentService.getEnrollment(student, discipline, mockUser)).thenReturn(enrollment);
+        when(disciplineEnrollmentViewMapper.toEntity(enrollment)).thenReturn(viewDTO);
+        when(enrollment.getStudentId()).thenReturn(studentId);
+
+        ResultActions resultActions = mockMvc.perform(get("/discipline/{code}/enroll/{studentId}", code, studentId));
+        MockMvcHelper.testSuccessfulResponse(resultActions, HttpStatus.OK)
+                .andExpect(jsonPath("result.code").value(viewDTO.getCode()))
+                .andExpect(jsonPath("result.studentId").value(viewDTO.getStudentId().toString()))
+                .andExpect(jsonPath("result.grade").value(viewDTO.getGrade()));
     }
 
     @Test
@@ -200,21 +232,25 @@ class DisciplineControllerTest {
         Student student = mock(Student.class);
         DisciplineEnrollment enrollment = mock(DisciplineEnrollment.class);
         DisciplineEnrollment updatedEnrollment = mock(DisciplineEnrollment.class);
+        DisciplineEnrollmentViewDTO viewDTO = new DisciplineEnrollmentViewDTO(code, studentId, 4.00);
 
         when(contextService.getCurrentUser()).thenReturn(mockUser);
-        when(disciplineService.getByCode(DisciplineCode.valueOf(code))).thenReturn(discipline);
+        when(disciplineService.getByCode(any(DisciplineCode.class))).thenReturn(discipline);
         when(studentService.getById(studentId)).thenReturn(student);
         when(disciplineEnrollmentService.getEnrollment(student, discipline, mockUser)).thenReturn(enrollment);
-        when(disciplineEnrollmentService.assignGrade(discipline, enrollment, Grade.valueOf(8.00), mockUser))
+        when(disciplineEnrollmentService.assignGrade(eq(discipline), eq(enrollment), any(Grade.class), eq(mockUser)))
                 .thenReturn(updatedEnrollment);
         when(updatedEnrollment.getStudentId()).thenReturn(studentId);
+        when(disciplineEnrollmentViewMapper.toEntity(updatedEnrollment)).thenReturn(viewDTO);
 
         ResultActions resultActions = mockMvc.perform(post("/discipline/{code}/grade", code)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(gradeDTO)));
 
         MockMvcHelper.testSuccessfulResponse(resultActions, HttpStatus.OK)
-                .andExpect(jsonPath("result").value(studentId.toString()));
+                .andExpect(jsonPath("result.code").value(viewDTO.getCode()))
+                .andExpect(jsonPath("result.studentId").value(viewDTO.getStudentId().toString()))
+                .andExpect(jsonPath("result.grade").value(viewDTO.getGrade()));
     }
 
     @Test
