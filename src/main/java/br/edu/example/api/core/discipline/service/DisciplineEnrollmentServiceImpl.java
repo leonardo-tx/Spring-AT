@@ -60,7 +60,7 @@ public class DisciplineEnrollmentServiceImpl implements DisciplineEnrollmentServ
         if (!currentUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)) {
             throw new ForbiddenException(PermissionFlag.DISCIPLINE_MANAGEMENT);
         }
-        if (currentUser.getPerson().getId() != discipline.getTeacherId()) {
+        if (!currentUser.getPerson().getId().equals(discipline.getTeacherId())) {
             throw new DisciplineDifferentTeacherException();
         }
         DisciplineEnrollment updated = new DisciplineEnrollment(

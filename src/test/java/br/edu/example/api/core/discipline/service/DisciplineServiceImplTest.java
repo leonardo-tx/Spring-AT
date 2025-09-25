@@ -84,7 +84,7 @@ class DisciplineServiceImplTest {
     void shouldUpdateDiscipline() {
         Discipline updated = new Discipline(disciplineCode, DisciplineName.valueOf("Advanced Math"), discipline.getTeacherId());
 
-        when(mockUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)).thenReturn(true);
+        when(mockUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)).thenReturn(true);
         when(disciplineRepository.findByCode("MATH101")).thenReturn(Optional.of(discipline));
         when(disciplineRepository.save(disciplineCode, updated)).thenReturn(updated);
 
@@ -96,7 +96,7 @@ class DisciplineServiceImplTest {
 
     @Test
     void shouldThrowForbiddenOnUpdateWithoutPermission() {
-        when(mockUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)).thenReturn(false);
+        when(mockUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)).thenReturn(false);
 
         assertThrows(
                 ForbiddenException.class,
@@ -106,7 +106,7 @@ class DisciplineServiceImplTest {
 
     @Test
     void shouldThrowNotFoundOnUpdateIfDisciplineDoesNotExist() {
-        when(mockUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)).thenReturn(true);
+        when(mockUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)).thenReturn(true);
         when(disciplineRepository.findByCode("MATH101")).thenReturn(Optional.empty());
 
         assertThrows(

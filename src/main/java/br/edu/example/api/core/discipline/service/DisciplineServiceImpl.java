@@ -32,8 +32,8 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public Discipline update(DisciplineCode oldCode, Discipline discipline, User currentUser) {
-        if (!currentUser.hasPermission(PermissionFlag.TEACHER_MANAGEMENT)) {
-            throw new ForbiddenException(PermissionFlag.TEACHER_MANAGEMENT);
+        if (!currentUser.hasPermission(PermissionFlag.DISCIPLINE_MANAGEMENT)) {
+            throw new ForbiddenException(PermissionFlag.DISCIPLINE_MANAGEMENT);
         }
         Discipline oldDiscipline = disciplineRepository.findByCode(oldCode.getValue())
                 .orElseThrow(DisciplineNotFoundException::new);
