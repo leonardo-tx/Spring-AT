@@ -1,6 +1,5 @@
 package br.edu.example.api.core.student.service;
 
-import br.edu.example.api.core.auth.exception.service.NotAuthenticatedException;
 import br.edu.example.api.core.auth.exception.service.UserNotFoundException;
 import br.edu.example.api.core.auth.model.User;
 import br.edu.example.api.core.auth.repository.UserRepository;

@@ -3,7 +3,6 @@ package br.edu.example.api.core.discipline.model;
 import br.edu.example.api.core.discipline.exception.model.code.DisciplineCodeInvalidFormatException;
 import br.edu.example.api.core.discipline.exception.model.code.DisciplineCodeInvalidLengthException;
 import br.edu.example.api.core.discipline.exception.model.code.DisciplineCodeNullException;
-import br.edu.example.api.core.generic.model.Email;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

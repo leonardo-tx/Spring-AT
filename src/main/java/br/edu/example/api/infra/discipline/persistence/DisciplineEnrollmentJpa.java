@@ -1,20 +1,20 @@
-package br.edu.example.api.infra.course.persistence;
+package br.edu.example.api.infra.discipline.persistence;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "courses")
+@Document(collection = "disciplineEnrollments")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CourseJpa {
+public class DisciplineEnrollmentJpa {
     @Id
-    private String id;
+    private DisciplineEnrollmentIdentifier id;
 
-    @Field(name = "name")
-    private String name;
+    @Field(name = "grade")
+    private Double grade;
 }

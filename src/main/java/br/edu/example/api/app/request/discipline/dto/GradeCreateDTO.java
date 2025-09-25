@@ -1,15 +1,17 @@
-package br.edu.example.api.app.request.course.dto;
+package br.edu.example.api.app.request.discipline.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CourseCreateDTO {
-    private String code;
-    private String name;
+public class GradeCreateDTO {
+    private UUID studentId;
+    private Double grade;
 }

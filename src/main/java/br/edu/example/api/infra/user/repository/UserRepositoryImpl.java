@@ -7,6 +7,9 @@ import br.edu.example.api.core.generic.model.Email;
 import br.edu.example.api.core.generic.model.Person;
 import br.edu.example.api.core.generic.model.UserRole;
 import br.edu.example.api.core.student.model.Student;
+import br.edu.example.api.infra.discipline.persistence.DisciplineJpa;
+import br.edu.example.api.infra.discipline.repository.DisciplineEnrollmentMongoRepository;
+import br.edu.example.api.infra.discipline.repository.DisciplineMongoRepository;
 import br.edu.example.api.infra.user.persistence.UserJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,6 +23,8 @@ import java.util.UUID;
 public class UserRepositoryImpl implements UserRepository {
     private final Mapper<User, UserJpa> userJpaMapper;
     private final UserMongoRepository userMongoRepository;
+    private final DisciplineEnrollmentMongoRepository disciplineEnrollmentMongoRepository;
+    private final DisciplineMongoRepository disciplineMongoRepository;
 
     @Override
     public Optional<User> findByEmail(Email email) {
@@ -56,5 +61,16 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void delete(Person person) {
         userMongoRepository.deleteById(person.getId());
+        if (person.getRole() == UserRole.STUDENT) {
+            disciplineEnrollmentMongoRepository.deleteByIdStudentId(person.getId());
+            return;
+        }
+        if (person.getRole() == UserRole.TEACHER) {
+            List<DisciplineJpa> disciplinesJpa = disciplineMongoRepository.findByTeacherId(person.getId());
+            disciplinesJpa.forEach(d -> {
+                d.setTeacherId(null);
+            });
+            disciplineMongoRepository.saveAll(disciplinesJpa);
+        }
     }
 }

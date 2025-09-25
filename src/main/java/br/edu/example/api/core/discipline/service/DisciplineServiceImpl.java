@@ -27,7 +27,7 @@ public class DisciplineServiceImpl implements DisciplineService {
         if (disciplineRepository.existsByCode(discipline.getCode().getValue())) {
             throw new DisciplineCodeConflictException();
         }
-        return disciplineRepository.save(discipline);
+        return disciplineRepository.save(null, discipline);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class DisciplineServiceImpl implements DisciplineService {
         if (!Objects.equals(oldCode.getValue(), discipline.getCode().getValue())) {
             disciplineRepository.delete(oldDiscipline);
         }
-        return disciplineRepository.save(discipline);
+        return disciplineRepository.save(oldCode, discipline);
     }
 
     @Override

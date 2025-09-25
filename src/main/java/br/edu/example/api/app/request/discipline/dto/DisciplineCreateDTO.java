@@ -15,5 +15,4 @@ public class DisciplineCreateDTO {
     private String code;
     private String name;
     private UUID teacherId;
-    private String courseCode;
 }

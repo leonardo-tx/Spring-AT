@@ -13,7 +13,6 @@ public class DisciplineViewMapper implements OutputMapper<Discipline, Discipline
                 .code(model.getCode().getValue())
                 .name(model.getName().getValue())
                 .teacherId(model.getTeacherId())
-                .courseCode(model.getCourseCode().getValue())
                 .build();
     }
 }

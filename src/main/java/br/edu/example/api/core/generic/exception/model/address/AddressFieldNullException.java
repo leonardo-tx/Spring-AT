@@ -1,7 +1,6 @@
 package br.edu.example.api.core.generic.exception.model.address;
 
 import br.edu.example.api.core.generic.exception.ValidationException;
-import br.edu.example.api.core.generic.model.Address;
 
 public final class AddressFieldNullException extends ValidationException {
     public AddressFieldNullException(String fieldName) {

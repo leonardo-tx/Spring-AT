@@ -12,5 +12,5 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class DisciplineEnrollmentIdentifier {
     private UUID studentId;
-    private String disciplineId;
+    private String disciplineCode;
 }

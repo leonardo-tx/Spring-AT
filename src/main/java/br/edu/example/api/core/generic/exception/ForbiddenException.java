@@ -2,9 +2,13 @@ package br.edu.example.api.core.generic.exception;
 
 import br.edu.example.api.core.generic.model.PermissionFlag;
 
-public final class ForbiddenException extends CoreException {
+public class ForbiddenException extends CoreException {
     public ForbiddenException(PermissionFlag permissionFlag) {
         super("permission.not.sufficient", generateMessage(permissionFlag));
+    }
+
+    public ForbiddenException(String code, String message) {
+        super(code, message);
     }
 
     private static String generateMessage(PermissionFlag permissionFlag) {

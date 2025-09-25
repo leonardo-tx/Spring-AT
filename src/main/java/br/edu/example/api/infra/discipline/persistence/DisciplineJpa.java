@@ -22,7 +22,4 @@ public class DisciplineJpa {
 
     @Field(name = "teacherId")
     private UUID teacherId;
-
-    @Field(name = "courseId")
-    private String courseId;
 }

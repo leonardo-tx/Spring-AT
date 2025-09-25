@@ -10,7 +10,6 @@ public final class Teacher extends Person {
             PermissionFlag.TEACHER_MANAGEMENT,
             PermissionFlag.STUDENT_MANAGEMENT,
             PermissionFlag.GRADE_MANAGEMENT,
-            PermissionFlag.COURSE_MANAGEMENT,
             PermissionFlag.DISCIPLINE_MANAGEMENT
     );
 
