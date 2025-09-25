@@ -5,6 +5,7 @@ import br.edu.example.api.core.discipline.exception.model.code.DisciplineCodeInv
 import br.edu.example.api.core.discipline.exception.model.code.DisciplineCodeNullException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.regex.Matcher;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class DisciplineCode {
     public static final int MIN_LENGTH = 3;
     public static final int MAX_LENGTH = 10;

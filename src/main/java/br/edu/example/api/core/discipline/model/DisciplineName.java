@@ -4,10 +4,12 @@ import br.edu.example.api.core.discipline.exception.model.name.DisciplineNameInv
 import br.edu.example.api.core.discipline.exception.model.name.DisciplineNameNullException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class DisciplineName {
     public static final int MIN_LENGTH = 2;
     public static final int MAX_LENGTH = 128;

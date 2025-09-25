@@ -4,6 +4,7 @@ import br.edu.example.api.app.request.discipline.dto.DisciplineCreateDTO;
 import br.edu.example.api.app.request.discipline.dto.DisciplineEnrollmentCreateDTO;
 import br.edu.example.api.app.request.discipline.dto.GradeCreateDTO;
 import br.edu.example.api.app.response.ApiResponse;
+import br.edu.example.api.app.response.discipline.dto.DisciplineEnrollmentViewDTO;
 import br.edu.example.api.app.response.discipline.dto.DisciplineViewDTO;
 import br.edu.example.api.core.auth.model.User;
 import br.edu.example.api.core.auth.service.ContextService;
@@ -35,6 +36,7 @@ public class DisciplineController {
     private final ContextService contextService;
     private final InputMapper<Discipline, DisciplineCreateDTO> disciplineCreateMapper;
     private final OutputMapper<Discipline, DisciplineViewDTO> disciplineViewMapper;
+    private final OutputMapper<DisciplineEnrollment, DisciplineEnrollmentViewDTO> disciplineEnrollmentViewMapper;
 
     @PostMapping
     public ResponseEntity<ApiResponse<DisciplineViewDTO>> create(@RequestBody DisciplineCreateDTO dto) {
@@ -92,7 +94,7 @@ public class DisciplineController {
     }
 
     @PostMapping("/{code}/enroll")
-    public ResponseEntity<ApiResponse<UUID>> enrollStudent(
+    public ResponseEntity<ApiResponse<DisciplineEnrollmentViewDTO>> enrollStudent(
             @PathVariable String code,
             @RequestBody DisciplineEnrollmentCreateDTO form
     ) {
@@ -101,11 +103,26 @@ public class DisciplineController {
         Student student = studentService.getById(form.getStudentId());
 
         DisciplineEnrollment enrollment = disciplineEnrollmentService.enrollStudent(student, discipline, currentUser);
-        return ApiResponse.success(enrollment.getStudentId()).createResponse(HttpStatus.CREATED);
+        DisciplineEnrollmentViewDTO view = disciplineEnrollmentViewMapper.toEntity(enrollment);
+        return ApiResponse.success(view).createResponse(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{code}/enroll/{studentId}")
+    public ResponseEntity<ApiResponse<DisciplineEnrollmentViewDTO>> getStudentEnroll(
+            @PathVariable String code,
+            @PathVariable UUID studentId
+    ) {
+        User currentUser = contextService.getCurrentUser();
+        Discipline discipline = disciplineService.getByCode(DisciplineCode.valueOf(code));
+        Student student = studentService.getById(studentId);
+
+        DisciplineEnrollment enrollment = disciplineEnrollmentService.getEnrollment(student, discipline, currentUser);
+        DisciplineEnrollmentViewDTO view = disciplineEnrollmentViewMapper.toEntity(enrollment);
+        return ApiResponse.success(view).createResponse(HttpStatus.OK);
     }
 
     @PostMapping("/{code}/grade")
-    public ResponseEntity<ApiResponse<UUID>> assignGrade(
+    public ResponseEntity<ApiResponse<DisciplineEnrollmentViewDTO>> assignGrade(
             @PathVariable String code,
             @RequestBody GradeCreateDTO form
     ) {
@@ -120,7 +137,8 @@ public class DisciplineController {
                 Grade.valueOf(form.getGrade()),
                 currentUser
         );
-        return ApiResponse.success(updated.getStudentId()).createResponse(HttpStatus.OK);
+        DisciplineEnrollmentViewDTO view = disciplineEnrollmentViewMapper.toEntity(updated);
+        return ApiResponse.success(view).createResponse(HttpStatus.OK);
     }
 
     @GetMapping("/{code}/approved")

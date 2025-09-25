@@ -5,6 +5,7 @@ import br.edu.example.api.core.generic.exception.model.email.EmailInvalidLengthE
 import br.edu.example.api.core.generic.exception.model.email.EmailNullException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.regex.Matcher;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class Email {
     public static final int MIN_LENGTH = 5;
     public static final int MAX_LENGTH = 254;

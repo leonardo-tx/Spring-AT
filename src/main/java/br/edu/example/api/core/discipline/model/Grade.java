@@ -3,10 +3,12 @@ package br.edu.example.api.core.discipline.model;
 import br.edu.example.api.core.discipline.exception.model.enrollment.grade.GradeOutOfRangeException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class Grade {
     public static final double MIN = 0.00;
     public static final double MAX = 10.00;

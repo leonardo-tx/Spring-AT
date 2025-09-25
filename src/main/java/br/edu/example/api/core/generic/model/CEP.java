@@ -4,10 +4,12 @@ import br.edu.example.api.core.generic.exception.model.cep.CEPInvalidLengthExcep
 import br.edu.example.api.core.generic.exception.model.cep.CEPNullException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class CEP {
     public static final int LENGTH = 8;
 

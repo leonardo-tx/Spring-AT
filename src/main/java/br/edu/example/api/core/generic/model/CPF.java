@@ -3,10 +3,12 @@ package br.edu.example.api.core.generic.model;
 import br.edu.example.api.core.generic.exception.model.cpf.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class CPF {
     public static final int LENGTH = 11;
 

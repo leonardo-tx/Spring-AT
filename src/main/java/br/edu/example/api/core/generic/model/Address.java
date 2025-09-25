@@ -4,12 +4,14 @@ import br.edu.example.api.core.generic.exception.model.address.AddressFieldInval
 import br.edu.example.api.core.generic.exception.model.address.AddressFieldNullException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Objects;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 public final class Address {
     public static final int MIN_LENGTH = 1;
     public static final int MAX_LENGTH = 255;
