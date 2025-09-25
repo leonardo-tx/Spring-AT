@@ -1,6 +1,5 @@
 package br.edu.example.api.core.generic.model;
 
-import br.edu.example.api.core.generic.exception.model.cep.CEPInvalidCharacterException;
 import br.edu.example.api.core.generic.exception.model.cep.CEPInvalidLengthException;
 import br.edu.example.api.core.generic.exception.model.cep.CEPNullException;
 import lombok.AccessLevel;
@@ -21,11 +20,6 @@ public final class CEP {
         String normalized = value.replaceAll("\\D", "");
         if (normalized.length() != LENGTH) {
             throw new CEPInvalidLengthException();
-        }
-        for (int i = 0; i < LENGTH; i++) {
-            if (!Character.isDigit(normalized.charAt(i))) {
-                throw new CEPInvalidCharacterException();
-            }
         }
         return new CEP(normalized);
     }

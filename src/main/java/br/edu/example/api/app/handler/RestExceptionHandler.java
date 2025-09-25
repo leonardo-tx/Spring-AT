@@ -2,10 +2,7 @@ package br.edu.example.api.app.handler;
 
 import br.edu.example.api.app.response.ApiResponse;
 import br.edu.example.api.core.auth.exception.service.NotAuthenticatedException;
-import br.edu.example.api.core.generic.exception.ConflictException;
-import br.edu.example.api.core.generic.exception.ForbiddenException;
-import br.edu.example.api.core.generic.exception.NotFoundException;
-import br.edu.example.api.core.generic.exception.ValidationException;
+import br.edu.example.api.core.generic.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,7 +21,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(NotAuthenticatedException.class)
-    public ResponseEntity<ApiResponse<Object>> unauthorizedException(NotAuthenticatedException e) {
+    public ResponseEntity<ApiResponse<Object>> unauthorizedException(AuthenticationException e) {
         return ApiResponse.error(e).createResponse(HttpStatus.UNAUTHORIZED);
     }
 
@@ -34,7 +31,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiResponse<Object>> unauthorizedException(ConflictException e) {
+    public ResponseEntity<ApiResponse<Object>> conflictException(ConflictException e) {
         return ApiResponse.error(e).createResponse(HttpStatus.CONFLICT);
     }
 }

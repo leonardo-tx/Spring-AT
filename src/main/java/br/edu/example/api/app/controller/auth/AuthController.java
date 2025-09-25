@@ -37,5 +37,4 @@ public class AuthController {
         UserDetailedViewDTO userDetailedViewDTO = userDetailedViewOutputMapper.toEntity(user);
         return ApiResponse.success(userDetailedViewDTO).createResponse(HttpStatus.OK);
     }
-
 }
